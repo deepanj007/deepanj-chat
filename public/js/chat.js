@@ -73,11 +73,11 @@ $(function(){
 					return;
 				}
 
-				email = yourEmail.val();
+				/*email = yourEmail.val();
 
 				if(!isValid(email)) {
 					alert("Please enter a valid email!");
-				}
+				}*/
 				else {
 
 					showMessage("inviteSomebody");
@@ -89,7 +89,7 @@ $(function(){
 			});
 		}
 
-		else if(data.number === 1) {
+		else if(data.number === 1 || data.number === 2) {
 
 			showMessage("personinchat",data);
 
@@ -108,11 +108,11 @@ $(function(){
 					alert("There already is a \"" + name + "\" in this room!");
 					return;
 				}
-				email = hisEmail.val();
+				/*email = hisEmail.val();
 
 				if(!isValid(email)){
 					alert("Wrong e-mail format!");
-				}
+				}*/
 				else {
 					socket.emit('login', {user: name, avatar: email, id: id});
 				}
@@ -152,7 +152,7 @@ $(function(){
 		if(data.boolean && id==data.room){
 
 			showMessage("somebodyLeft", data);
-			chats.empty();
+			//chats.empty();
 		}
 
 	});
@@ -166,11 +166,12 @@ $(function(){
 	});
 
 	socket.on('receive', function(data){
-
+        beep();
 		showMessage('chatStarted');
 
 		if(data.msg.trim().length) {
 			createChatMessage(data.msg, data.user, data.img, moment());
+            
 			scrollToBottom();
 		}
 	});
@@ -236,8 +237,8 @@ $(function(){
 					'<img src=' + imgg + ' />' +
 					'<b></b>' +
 					'<i class="timesent" data-time=' + now + '></i> ' +
-				'</div>' +
-				'<p></p>' +
+				'</div>' 
+            +'<p></p>'+
 			'</li>');
 
 		// use the 'text' method to escape malicious user input
@@ -254,11 +255,11 @@ $(function(){
 		$("html, body").animate({ scrollTop: $(document).height()-$(window).height() },1000);
 	}
 
-	function isValid(thatemail) {
+	/*function isValid(thatemail) {
 
 		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		return re.test(thatemail);
-	}
+	}*/
 
 	function showMessage(status,data){
 
@@ -333,5 +334,10 @@ $(function(){
 			tooManyPeople.fadeIn(1200);
 		}
 	}
+    
+    function beep() {
+    var snd = new Audio("../audio/Auditorium Applause-SoundBible.com-280911206.mp3");  
+    snd.play();
+}
 
 });
