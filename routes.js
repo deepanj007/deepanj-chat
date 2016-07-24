@@ -66,7 +66,7 @@ module.exports = function(app,io){
 
 			var room = findClientsSocket(io, data.id);
 			// Only two people per room are allowed
-			if (room.length < 2) {
+			if (room.length <= 2) {
 
 				// Use the socket object to store data. Each client gets
 				// their own unique socket object
@@ -83,6 +83,27 @@ module.exports = function(app,io){
 				socket.join(data.id);
 
 				if (room.length == 1) {
+
+					var usernames = [],
+						avatars = [];
+
+					usernames.push(room[0].username);
+					usernames.push(socket.username);
+
+					avatars.push(room[0].avatar);
+					avatars.push(socket.avatar);
+
+					// Send the startChat event to all the people in the
+					// room, along with a list of people that are in it.
+
+					chat.in(data.id).emit('startChat', {
+						boolean: true,
+						id: data.id,
+						users: usernames,
+						avatars: avatars
+					});
+				}
+                if (room.length == 2) {
 
 					var usernames = [],
 						avatars = [];
